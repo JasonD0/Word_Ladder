@@ -17,7 +17,8 @@ int main() {
   std::cout << "Enter destination word: ";
   std::cin >> dest;
 
-  std::queue<std::vector<std::string>> wls = Bfs(src, dest, lexicon);
+  std::vector<std::vector<std::string>> wls = Bfs(src, dest, lexicon);
+  SortWordLadders(wls);
 
   std::cout << "Found ladder: ";
 

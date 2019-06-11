@@ -3,13 +3,18 @@
 #include <vector>
 #include <queue>
 #include <iostream>
+#include <algorithm>
+#include <utility>
 #include <unordered_map>
 
 #include "assignments/wl/word_ladder.h"
 
+//TODO  share  shire  sharn     shire appears before sharn  (but need alphabet)  b/c  i changed before n
+// use .sort(start, end, comparator func)  at end
 
-std::queue<std::vector<std::string>> Bfs(std::string src, std::string dest, std::set<std::string>& lex) {
-  std::queue<std::vector<std::string>> wls, result;
+std::vector<std::vector<std::string>> Bfs(std::string src, std::string dest, std::set<std::string>& lex) {
+  std::queue<std::vector<std::string>> wls;
+  std::vector<std::vector<std::string>> result;
   std::unordered_map<std::string, int> visited;
   int min_ladder_len = 0, curr_ladder_len = 0;
 
@@ -46,7 +51,7 @@ std::queue<std::vector<std::string>> Bfs(std::string src, std::string dest, std:
 
         // goal state
         if (newWord.compare(dest) == 0) {
-          result.push(newWl);
+          result.push_back(newWl);
           min_ladder_len = newWl.size();
           break;
         }
@@ -62,13 +67,20 @@ std::queue<std::vector<std::string>> Bfs(std::string src, std::string dest, std:
 }
 
 /**
- * Shows all the word ladders
+ * Sort word ladders alphabetically
  * @param wls
  */
-void PrintWordLadders(std::queue<std::vector<std::string>>& wls) {
-  while (!wls.empty()) {
-    PrintWordLadder(wls.front());
-    wls.pop();
+void SortWordLadders(std::vector<std::vector<std::string>>& wls) {
+  std::sort(wls.begin(), wls.end());
+}
+
+/**
+ * Shows all word ladders
+ * @param wls
+ */
+void PrintWordLadders(std::vector<std::vector<std::string>>& wls) {
+  for (const auto& wl : wls) {
+    PrintWordLadder(wl);
   }
 }
 
@@ -76,7 +88,7 @@ void PrintWordLadders(std::queue<std::vector<std::string>>& wls) {
  * Shows the word ladder
  * @param wl
  */
-void PrintWordLadder(std::vector<std::string>& wl) {
+void PrintWordLadder(const std::vector<std::string>& wl) {
   for (const auto& word : wl) {
     std::cout << word << " ";
   }
