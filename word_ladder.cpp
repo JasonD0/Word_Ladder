@@ -8,6 +8,42 @@
 
 #include "assignments/wl/word_ladder.h"
 
+void InitGraph(std::set<std::string>& lex) {
+  std::unordered_map<std::string, std::vector<std::string>> connections;
+
+  for (const auto& word : lex) {
+     int len = word.size();
+     for (int i = 0; i < len ; i++) {
+         std::string reg = word;
+         reg = reg.replace(i, 1, ".");
+
+         auto it = connections.find(reg);
+         if (it != connections.end()) {
+           (*it).push_back(word);
+         } else {
+           connections.emplace(reg, word);
+         }
+     }
+  }
+
+  for (const auto& reg : connections) {
+    it = connections.find(reg);
+    std::vector<std::string> edges = *it;
+    for (const auto& v1 : edges) {
+      for (const auto& v2 : edges) {
+        if (v1.compare(v2) == 0) continue;
+
+        auto itr = graph.find(v1);
+        if (itr != graph.end()) {
+         (*itr).push_back(v2);
+        } else {
+          graph.emplace(v1, v2);
+        }
+      }
+    }
+  }
+}
+
 /**
  * Performs breadth first search to obtain all word ladders from src to dest
  * @param src   start word of the word ladder
