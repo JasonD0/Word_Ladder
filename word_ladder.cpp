@@ -99,7 +99,7 @@ std::vector<std::vector<std::string>> Bfs(std::string src, std::string dest,
 
         } else {
           auto itr = visited.find(v);
-          if (itr != visited.end() && (itr->second).size() < curr_len) {
+          if (itr != visited.end() && itr->second < curr_len) {
             continue;
           }
         }
