@@ -30,6 +30,17 @@ void CreateConnections(std::set<std::string>& lex,
 }
 
 
+void MakeEdge(std::unordered_map<std::string, std::set<std::string>>& graph, std::string v1, std::string v2) {
+  auto itr = graph.find(v1);
+  if (itr != graph.end()) {
+    (itr->second).insert(v2);
+
+  } else {
+    graph.emplace(v1, std::set<std::string>{v2});
+  }
+
+}
+
 void CreateEdges(std::unordered_map<std::string, std::vector<std::string>>& connections,
                std::unordered_map<std::string, std::set<std::string>>& graph) {
 
@@ -41,25 +52,13 @@ void CreateEdges(std::unordered_map<std::string, std::vector<std::string>>& conn
       for (const auto& v2 : edges) {
         if (v1.compare(v2) == 0) continue;
 
-        auto itr = graph.find(v1);
-        if (itr != graph.end()) {
-          (itr->second).insert(v2);
-
-        } else {
-          graph.emplace(v1, std::set<std::string>{v2});
-        }
-
-        itr = graph.find(v2);
-        if (itr != graph.end()) {
-          (itr->second).emplace(v1);
-
-        } else {
-          graph.emplace(v2, std::set<std::string>{v1});
-        }
+        MakeEdge(graph, v1, v2);
+        MakeEdge(graph, v2, v1);
       }
     }
   }
 }
+
 
 std::unordered_map<std::string, std::set<std::string>> CreateGraph(std::set<std::string>& lex) {
 
@@ -87,7 +86,7 @@ std::vector<std::vector<std::string>> Bfs(std::string src, std::string dest,
     wls.pop();
 
     curr_len = wl.size();
-    if (curr_len >= shortest_len && shortest_len) break;
+    if (shortest_len && curr_len >= shortest_len) break;
 
     const std::string word = wl.back();
 
@@ -96,10 +95,9 @@ std::vector<std::vector<std::string>> Bfs(std::string src, std::string dest,
       auto edges = it->second;
 
       for (const auto& v : edges) {
-        std::vector<std::string> new_wl = wl;
-        new_wl.push_back(v);
-
         if (v.compare(dest) == 0) {
+          std::vector<std::string> new_wl = wl;
+          new_wl.push_back(v);
           result.push_back(new_wl);
           shortest_len = new_wl.size();
           break;
@@ -107,16 +105,19 @@ std::vector<std::vector<std::string>> Bfs(std::string src, std::string dest,
         } else {
           auto itr = visited.find(v);
           if (itr != visited.end() && itr->second < curr_len) {
-            // remove word here?
+            graph.erase(v);
             continue;
           }
         }
 
+        std::vector<std::string> new_wl = wl;
+        new_wl.push_back(v);
         visited.emplace(v, new_wl.size());
         wls.push(new_wl);
       }
     }
 
+    if (curr_len == 1) graph.erase(src);
   }
 
   return result;
