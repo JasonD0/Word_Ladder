@@ -31,32 +31,40 @@ void CreateConnections(std::set<std::string>& lex,
 
 
 void CreateEdges(std::unordered_map<std::string, std::vector<std::string>>& connections,
-               std::unordered_map<std::string, std::vector<std::string>>& graph) {
+               std::unordered_map<std::string, std::set<std::string>>& graph) {
 
   for (auto pair = connections.begin(); pair != connections.end(); ++pair) {
     const std::vector<std::string> edges = pair->second;
 
     for (const auto& v1 : edges) {
-      auto itr = graph.find(v1);
 
       for (const auto& v2 : edges) {
         if (v1.compare(v2) == 0) continue;
 
+        auto itr = graph.find(v1);
         if (itr != graph.end()) {
-          (itr->second).push_back(v2);
+          (itr->second).insert(v2);
 
         } else {
-          graph.emplace(v1, std::vector<std::string>{v2});
+          graph.emplace(v1, std::set<std::string>{v2});
+        }
+
+        itr = graph.find(v2);
+        if (itr != graph.end()) {
+          (itr->second).emplace(v1);
+
+        } else {
+          graph.emplace(v2, std::set<std::string>{v1});
         }
       }
     }
   }
 }
 
-std::unordered_map<std::string, std::vector<std::string>> CreateGraph(std::set<std::string>& lex) {
+std::unordered_map<std::string, std::set<std::string>> CreateGraph(std::set<std::string>& lex) {
 
   std::unordered_map<std::string, std::vector<std::string>> connections;
-  std::unordered_map<std::string, std::vector<std::string>> graph;
+  std::unordered_map<std::string, std::set<std::string>> graph;
 
   CreateConnections(lex, connections);
   CreateEdges(connections, graph);
@@ -65,7 +73,7 @@ std::unordered_map<std::string, std::vector<std::string>> CreateGraph(std::set<s
 }
 
 std::vector<std::vector<std::string>> Bfs(std::string src, std::string dest,
-                                          std::unordered_map<std::string, std::vector<std::string>>& graph) {
+                                          std::unordered_map<std::string, std::set<std::string>>& graph) {
   std::queue<std::vector<std::string>> wls;
   std::vector<std::vector<std::string>> result;
   std::unordered_map<std::string, int> visited;
@@ -83,7 +91,6 @@ std::vector<std::vector<std::string>> Bfs(std::string src, std::string dest,
 
     const std::string word = wl.back();
 
-
     auto it = graph.find(word);
     if (it != graph.end()) {
       auto edges = it->second;
@@ -100,6 +107,7 @@ std::vector<std::vector<std::string>> Bfs(std::string src, std::string dest,
         } else {
           auto itr = visited.find(v);
           if (itr != visited.end() && itr->second < curr_len) {
+            // remove word here?
             continue;
           }
         }
@@ -110,7 +118,6 @@ std::vector<std::vector<std::string>> Bfs(std::string src, std::string dest,
     }
 
   }
-  graph.at(dest);
 
   return result;
 }
