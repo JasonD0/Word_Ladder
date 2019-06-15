@@ -1,7 +1,8 @@
+#include <algorithm>
 #include <iostream>
 #include <queue>
+#include <string>
 #include <vector>
-#include <algorithm>
 
 #include "assignments/wl/lexicon.h"
 #include "assignments/wl/word_ladder.h"
@@ -13,7 +14,8 @@ int main() {
 
   std::cout << "Enter start word (RETURN to quit): ";
   std::cin >> src;
-  if (src.compare("RETURN") == 0) return 0;
+  if (src.compare("RETURN") == 0)
+    return 0;
 
   std::cout << "Enter destination word: ";
   std::cin >> dest;

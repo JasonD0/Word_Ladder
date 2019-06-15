@@ -1,7 +1,10 @@
 #ifndef ASSIGNMENTS_WL_WORD_LADDER_H_
 #define ASSIGNMENTS_WL_WORD_LADDER_H_
 
+#include <set>
+#include <string>
 #include <unordered_map>
+#include <vector>
 
 using Graph = std::unordered_map<std::string, std::set<std::string>>;
 using Connections = std::unordered_map<std::string, std::vector<std::string>>;

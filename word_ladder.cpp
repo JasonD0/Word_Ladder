@@ -24,7 +24,6 @@ void MakeEdge(Graph& graph, std::string v1, std::string v2);
  */
 void FindConnections(std::set<std::string>& lex, std::string src,
                      Connections& connections) {
-
   int req_len = src.size(), len;
 
   for (const auto& word : lex) {
@@ -53,12 +52,10 @@ void FindConnections(std::set<std::string>& lex, std::string src,
  * @param graph         graph representing the connections
  */
 void CreateEdges(Connections& connections, Graph& graph) {
-
   for (auto pair = connections.begin(); pair != connections.end(); ++pair) {
     const std::vector<std::string> edges = pair->second;
 
     for (const auto& v1 : edges) {
-
       for (const auto& v2 : edges) {
         if (v1.compare(v2) == 0) continue;
 
@@ -77,7 +74,6 @@ void CreateEdges(Connections& connections, Graph& graph) {
  * @param v2      vertex B
  */
 void MakeEdge(Graph& graph, std::string v1, std::string v2) {
-
   auto itr = graph.find(v1);
   if (itr != graph.end()) {
     (itr->second).insert(v2);
@@ -85,7 +81,6 @@ void MakeEdge(Graph& graph, std::string v1, std::string v2) {
   } else {
     graph.emplace(v1, std::set<std::string>{v2});
   }
-
 }
 
 /**
@@ -97,7 +92,6 @@ void MakeEdge(Graph& graph, std::string v1, std::string v2) {
  *              letter
  */
 Graph CreateGraph(std::set<std::string>& lex, std::string src) {
-
   Connections connections;
   Graph graph;
 
@@ -118,7 +112,6 @@ Graph CreateGraph(std::set<std::string>& lex, std::string src) {
  * @return        vector of all shortest word ladders
  */
 WordLadders Bfs(std::string src, std::string dest, Graph& graph) {
-
   std::queue<WordLadder> wls;
   WordLadders result;
   std::unordered_map<std::string, int> visited;
@@ -145,7 +138,6 @@ WordLadders Bfs(std::string src, std::string dest, Graph& graph) {
       auto edges = it->second;
 
       for (const auto& v : edges) {
-
         /* Destination word reached */
         if (v.compare(dest) == 0) {
           WordLadder new_wl = wl;
@@ -185,7 +177,6 @@ WordLadders Bfs(std::string src, std::string dest, Graph& graph) {
  * @param wls   vector of word ladders
  */
 void SortWordLadders(WordLadders& wls) {
-
   std::sort(wls.begin(), wls.end());
 }
 
@@ -195,17 +186,20 @@ void SortWordLadders(WordLadders& wls) {
  * @param wls   vector of word ladders
  */
 void PrintWordLadders(const WordLadders& wls) {
-
   if (wls.empty()) {
     std::cout << "No ladder found.\n";
     return;
   }
 
-  bool first_ladder = true;
   std::cout << "Found ladder: ";
+  bool first_ladder = true;
+
   for (const auto& wl : wls) {
-    if (first_ladder) first_ladder = !first_ladder;
-    else std::cout << "\n";
+    if (first_ladder) {
+      first_ladder = !first_ladder;
+    } else {
+      std::cout << "\n";
+    }
 
     PrintWordLadder(wl);
   }
@@ -217,7 +211,6 @@ void PrintWordLadders(const WordLadders& wls) {
  * @param wl    word ladder
  */
 void PrintWordLadder(const WordLadder& wl) {
-
   for (const auto& word : wl) {
     std::cout << word << " ";
   }
