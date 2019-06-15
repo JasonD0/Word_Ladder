@@ -2,14 +2,15 @@
 #define ASSIGNMENTS_WL_WORD_LADDER_H_
 
 #include <unordered_map>
-//std::vector<std::vector<std::string>> Bfs(std::string src, std::string dest, std::set<std::string>& lex);
 
-void PrintWordLadders(const std::vector<std::vector<std::string>>& wls);
-void PrintWordLadder(const std::vector<std::string>& wl);
-void SortWordLadders(std::vector<std::vector<std::string>>& wls);
-void CreateConnections(std::set<std::string>& lex, std::unordered_map<std::string, std::vector<std::string>>& connections);
-void CreateEdges(std::unordered_map<std::string, std::vector<std::string>>& connections, std::unordered_map<std::string, std::set<std::string>>& graph);
-std::unordered_map<std::string, std::set<std::string>> CreateGraph(std::set<std::string>& lex);
-std::vector<std::vector<std::string>> Bfs(std::string src, std::string dest, std::unordered_map<std::string, std::set<std::string>>& graph);
+using Graph = std::unordered_map<std::string, std::set<std::string>>;
+using Connections = std::unordered_map<std::string, std::vector<std::string>>;
+using WordLadders = std::vector<std::vector<std::string>>;
+using WordLadder = std::vector<std::string>;
+
+void PrintWordLadders(const WordLadders& wls);
+void SortWordLadders(WordLadders& wls);
+Graph CreateGraph(std::set<std::string>& lex, std::string src);
+WordLadders Bfs(std::string src, std::string dest, Graph& graph);
 
 #endif  // ASSIGNMENTS_WL_WORD_LADDER_H_

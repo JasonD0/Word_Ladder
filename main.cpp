@@ -18,16 +18,8 @@ int main() {
   std::cout << "Enter destination word: ";
   std::cin >> dest;
 
-  /* filter words of the same length as src */
-  std::set<std::string> new_lexicon;
-  std::copy_if(lexicon.begin(), lexicon.end(),
-               std::inserter(new_lexicon, new_lexicon.end()),
-               [=](std::string s){return s.size() == src.size();});
-
-  auto graph = CreateGraph(new_lexicon);
-//  std::vector<std::vector<std::string>> wls = Bfs(src, dest, new_lexicon);
-
-  std::vector<std::vector<std::string>> wls = Bfs(src, dest, graph);
+  Graph graph = CreateGraph(lexicon, src);
+  WordLadders wls = Bfs(src, dest, graph);
 
   SortWordLadders(wls);
 
