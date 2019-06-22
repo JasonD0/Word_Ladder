@@ -195,7 +195,7 @@ void SortWordLadders(WordLadders& wls) {
  */
 void PrintWordLadders(const WordLadders& wls) {
   if (wls.empty()) {
-    std::cout << "No ladder found.";
+    std::cout << "No ladder found.\n";
     return;
   }
 

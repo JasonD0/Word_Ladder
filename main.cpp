@@ -13,9 +13,10 @@ int main() {
   std::string src, dest;
 
   std::cout << "Enter start word (RETURN to quit): ";
-  std::cin >> src;
-  if (src.compare("RETURN") == 0)
+  std::getline(std::cin, src);
+  if (src.size() == 0) {
     return 0;
+  }
 
   std::cout << "Enter destination word: ";
   std::cin >> dest;
